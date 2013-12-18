@@ -1,4 +1,4 @@
-function [ box ] = detectPlate( frame )
+function [ box , crop] = detectPlate( frame )
 %DETECTPLATE Takes an RGB image and returns a logical image.
 %   Detailed explanation goes here
 % Convert to HSV and select Saturation channel
@@ -8,7 +8,7 @@ frame_sat = frame_hsv(:,:,2);
 frame_val = frame_hsv(:,:,3);
 
 hueThresholdLow  = 0.10;
-hueThresholdHigh = 0.14;
+hueThresholdHigh = 0.16;
 satThresholdLow  = 0.4;
 satThresholdHigh = 1;
 valThresholdLow  = 0.5;
@@ -29,5 +29,6 @@ areas = [rp.Area];
 [~,indexOfMax] = max(areas);
 
 box = rp(indexOfMax).BoundingBox;
+crop = imcrop(frame,box);
 end
 
