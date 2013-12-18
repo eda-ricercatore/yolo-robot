@@ -122,12 +122,20 @@ totalframes = length(licensevid(1,1,1,:));
 for i = 1:totalframes
     % show frame in axes
     frame = read(handles.vid,i);
-    [box,crop] = detectPlate(frame);
+    [box,crop,hit] = detectPlate(frame);
     axes(handles.axsVideoOutput);
-        
+    plate = im2bw(lapgauss(crop));
+    platenum = plateident(plate);
+    
+    %if statement to check that platenum is not the same as the previous
+    %entry before adding to listbox
+    
     image(frame);
-    hold on;
-    rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+    if hit
+        hold on;
+        rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+    end
+    
     set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
     axis off;
     % take frame and perform SIFT
