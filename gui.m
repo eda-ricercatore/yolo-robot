@@ -58,6 +58,7 @@ handles.output = hObject;
 % Update handles structure
 guidata(hObject, handles);
 
+axis off;
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
 
@@ -123,6 +124,7 @@ for i = 1:totalframes
     axes(handles.axsVideoOutput);
     image(read(handles.vid,i));
     set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
+    axis off;
     % take frame and perform SIFT
     
     % cut license plate file and send to decipher.m, log frame nr and time
