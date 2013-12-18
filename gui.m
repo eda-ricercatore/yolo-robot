@@ -122,28 +122,7 @@ totalframes = length(licensevid(1,1,1,:));
 for i = 1:totalframes
     % show frame in axes
     frame = read(handles.vid,i);
-    
-    % Convert to HSV and select Saturation channel
-    frame_hsv = rgb2hsv(frame);
-    frame_hue = frame_hsv(:,:,1);
-    frame_sat = frame_hsv(:,:,2);
-    frame_val = frame_hsv(:,:,3);
-    
-    % Set thresholds
-    hueThresholdLow = 0.10;
-    hueThresholdHigh = 0.14;
-    satThresholdLow = 0.4;
-    satThresholdHigh = 1;
-    valThresholdLow = 0.5;
-    valThresholdHigh = 1.0;
-
-    % Threshold and segment image
-    hueMask = (frame_hue >= hueThresholdLow) & (frame_hue <= hueThresholdHigh);
-    satMask = (frame_sat >= satThresholdLow) & (frame_sat <= satThresholdHigh);
-    valMask = (frame_val >= valThresholdLow) & (frame_val <= valThresholdHigh);
-
-    bw = hueMask & satMask & valMask;
-    
+    bw = detectPlate(frame);
     axes(handles.axsVideoOutput);
         
     image(bw*100);
