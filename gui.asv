@@ -103,7 +103,6 @@ function btnImportVideo_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % open prompt to select file
 [filename, pathname] = uigetfile('*.avi', 'Select the file to be imported');
-importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
 licensevid = read(vid);
 handles.vid = licensevid;
