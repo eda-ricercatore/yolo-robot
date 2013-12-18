@@ -121,8 +121,10 @@ licensevid = read(handles.vid);
 totalframes = length(licensevid(1,1,1,:));
 for i = 1:totalframes
     % show frame in axes
+    frame = read(handles.vid,i);
     axes(handles.axsVideoOutput);
-    image(read(handles.vid,i));
+
+    image(frame);
     set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
     axis off;
     % take frame and perform SIFT
