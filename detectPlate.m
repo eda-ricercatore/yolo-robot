@@ -1,4 +1,4 @@
-function [ box , crop] = detectPlate( frame )
+function [box, crop, hit] = detectPlate( frame )
 %DETECTPLATE Takes an RGB image and returns a logical image.
 %   Detailed explanation goes here
 % Convert to HSV and select Saturation channel
@@ -29,6 +29,21 @@ areas = [rp.Area];
 [~,indexOfMax] = max(areas);
 
 box = rp(indexOfMax).BoundingBox;
+
+% Sanity checks to only return a box that is likely to be a real license
+% plate
+box_ratio = box(3) / box(4);
+if (box_ratio < 4 || box_ratio > 5)
+    hit = false;
+    crop = 0;
+    return;
+end
+if (box(1) < 100 || box(2) < 25) 
+    hit = false;
+    crop = 0;
+    return;
+end
 crop = imcrop(frame,box);
+hit = true;
 end
 
