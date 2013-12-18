@@ -103,6 +103,7 @@ function btnImportVideo_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 % open prompt to select file
 [filename, pathname] = uigetfile('*.avi', 'Select the file to be imported');
+importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
 licensevid = read(vid);
 handles.vid = licensevid;
@@ -113,3 +114,13 @@ function btnProcessVideo_Callback(hObject, eventdata, handles)
 % hObject    handle to btnProcessVideo (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+licensevid = handles.vid;
+totalframes = length(video(1,1,1,:));
+for i = 1:totalframes
+    % take frame and perform SIFT
+    axs
+    % cut license plate file and send to decipher.m, log frame nr and time
+
+    % print deciphered license plate in lstOutputBox

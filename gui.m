@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 18-Dec-2013 10:07:56
+% Last Modified by GUIDE v2.5 18-Dec-2013 11:01:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -105,8 +105,8 @@ function btnImportVideo_Callback(hObject, eventdata, handles)
 [filename, pathname] = uigetfile('*.avi', 'Select the file to be imported');
 importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
-licensevid = read(vid);
-handles.vid = licensevid;
+handles.vid = vid;
+guidata(hObject,handles);
 
 
 % --- Executes on button press in btnProcessVideo.
@@ -114,3 +114,19 @@ function btnProcessVideo_Callback(hObject, eventdata, handles)
 % hObject    handle to btnProcessVideo (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+licensevid = read(handles.vid);
+totalframes = length(licensevid(1,1,1,:));
+for i = 1:totalframes
+    % show frame in axes
+    axes(handles.axsVideoOutput);
+    image(read(handles.vid,i));
+    set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
+    % take frame and perform SIFT
+    
+    % cut license plate file and send to decipher.m, log frame nr and time
+
+    % print deciphered license plate in lstOutputBox
+
+end
