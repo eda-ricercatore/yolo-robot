@@ -1,5 +1,5 @@
-function [boxes, cropped, hits] = detectPlate( frame )
-close all
+function [boxes, crop, hits] = detectPlate( frame )
+
 %DETECTPLATE Takes an RGB image and returns a logical image.
 %   Detailed explanation goes here
 % Convert to HSV and select Saturation channel
