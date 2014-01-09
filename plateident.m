@@ -11,7 +11,8 @@ function outputString = plateident(licenseplateimg)
 grplate = rgb2gray(licenseplateimg);
 bwplate = abs(im2bw(grplate,0.25)-1);
 
-%% perform some minor binary morphology operations on the image
+%% perform some minor binary morphology operations on the image, 
+%  not necessary, we do this after we crop the image further
 
 % chop op the plate into recognizable individual characters (taking care to
 % not ignore the dashes), then feed these chunks to the charident function,
@@ -20,9 +21,23 @@ bwplate = abs(im2bw(grplate,0.25)-1);
 % character this will help with identification (this can be augmented if we 
 % wish the system to handle foreign plates)
 
-imshow(bwplate)
+se = ones(6,6);
+bw = imopen(bwplate,se);
+bw2 = imclose(bw,se);
+objects = bwconncomp(bw2,8);
+rp = regionprops(objects,'Area');
+l = labelmatrix(objects);
 
-objects = bwconncomp(bw,8);
+subplot(2,2,1)
+imshow(bwplate)
+subplot(2,2,2)
+imshow(bw)
+subplot(2,2,3)
+imshow(bw2)
+subplot(2,2,4)
+imshow(label2rgb(l))
+
 %% sort objects in the image by size, take largest object as max and min 
 %% y-value of all other objects, make the x-axis also between the largest 
 %% 6 objects, this should avoid all border issues and artifacts.
+
