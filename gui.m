@@ -126,9 +126,10 @@ for i = 1:totalframes
     % oid).
     if hit > 0
         hold on;
-        rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+
         for j = 1:hit
-            platenum = plateident(crop(j));
+            rectangle('Position',box(j,:),'EdgeColor','r','LineWidth',2);
+            %platenum = plateident(crop(j));
             %check om te zien of platenum al in listbox zit, anders
             %toevoegen
         end

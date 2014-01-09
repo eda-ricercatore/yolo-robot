@@ -1,4 +1,4 @@
-function [box, crop, hit] = detectPlate( frame )
+function [box, crop, hits] = detectPlate( frame )
 %DETECTPLATE Takes an RGB image and returns a logical image.
 %   Detailed explanation goes here
 % Convert to HSV and select Saturation channel
@@ -24,20 +24,31 @@ bw = hueMask & satMask & valMask;
 objects = bwconncomp(bw,8);
 rp = regionprops(objects,'Area','PixelIdxList','BoundingBox');
 
-% Get the bounding box of largest object
+% Get the areas in the binary image
 areas = [rp.Area];
-[~,indexOfMax] = max(areas);
 
-box = rp(indexOfMax).BoundingBox;
+% Sort objects by area
+[~, sortedIndices] = sort(areas, 'descend');
+totalAreas = length(areas);
 
-% Sanity checks to only return a box that is likely to be a real license
-% plate
-if (box(3) < 100 || box(4) < 25)
-    hit = false;
-    crop = 0;
-    return;
+% Loop over objects to reveal plates
+hits = 0;
+box = [];
+crop = struct;
+for i= 1:totalAreas
+    index = sortedIndices(i);
+    currentBox = rp(index).BoundingBox;
+    if (validBox(currentBox))
+        hits = i;
+        %currentCrop = image(imcrop(frame, currentBox));
+        crop.i = imcrop(frame, currentBox);
+        box(i,:) = currentBox;
+    else
+        % Since we are using sorted elements, the first invalid box will
+        % terminate the loop
+
+        break
+    end
 end
-crop = imcrop(frame,box);
-hit = true;
 end
 
