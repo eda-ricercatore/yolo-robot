@@ -32,12 +32,6 @@ box = rp(indexOfMax).BoundingBox;
 
 % Sanity checks to only return a box that is likely to be a real license
 % plate
-box_ratio = box(3) / box(4);
-if (box_ratio < 4 || box_ratio > 5)
-    hit = false;
-    crop = 0;
-    return;
-end
 if (box(1) < 100 || box(2) < 25) 
     hit = false;
     crop = 0;
