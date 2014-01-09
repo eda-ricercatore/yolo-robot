@@ -40,7 +40,6 @@ for i= 1:totalAreas
     currentBox = rp(index).BoundingBox;
     if (validBox(currentBox))
         hits = i;
-        %currentCrop = image(imcrop(frame, currentBox));
         crop.i = imcrop(frame, currentBox);
         box(i,:) = currentBox;
     else
