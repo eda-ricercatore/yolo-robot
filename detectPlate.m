@@ -22,6 +22,8 @@ valMask = (frame_val >= valThresholdLow) & (frame_val <= valThresholdHigh);
 
 bw = hueMask & satMask & valMask;
 
+clear hueMask satMask valMask frame_hsv frame_hue frame_sat frame_val
+
 objects = bwconncomp(bw,8);
 rp = regionprops(objects,'all');
 
