@@ -8,7 +8,7 @@ frame_hue = frame_hsv(:,:,1);
 frame_sat = frame_hsv(:,:,2);
 frame_val = frame_hsv(:,:,3);
 
-hueThresholdLow  = 0.09;
+hueThresholdLow  = 0.08;
 hueThresholdHigh = 0.16;
 satThresholdLow  = 0.4;
 satThresholdHigh = 1;
