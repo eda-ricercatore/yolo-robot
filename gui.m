@@ -122,9 +122,16 @@ for i = 1:totalframes
     %entry before adding to listbox
 
     image(frame);
-    if hit
+    % check invoeren om runtime te optimaliseren (intensity difference
+    % oid).
+    if hit > 0
         hold on;
         rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+        for j = 1:hit
+            platenum = plateident(crop(j));
+            %check om te zien of platenum al in listbox zit, anders
+            %toevoegen
+        end
     end
 
     set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
@@ -134,37 +141,37 @@ end
 
 
 % --- Executes on button press in btnProcessVideo.
-function btnProcessVideo_Callback(hObject, eventdata, handles)
+% function btnProcessVideo_Callback(hObject, eventdata, handles)
 % hObject    handle to btnProcessVideo (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 
-licensevid = read(handles.vid);
-totalframes = length(licensevid(1,1,1,:));
-for i = 1:totalframes
-    % show frame in axes
-    frame = read(handles.vid,i);
-    [box,crop,hit] = detectPlate(frame);
-    axes(handles.axsVideoOutput);
-    plate = im2bw(lapgauss(crop));
-    platenum = plateident(plate);
-    
-    %if statement to check that platenum is not the same as the previous
-    %entry before adding to listbox
-    
-    image(frame);
-    if hit
-        hold on;
-        rectangle('Position',box,'EdgeColor','r','LineWidth',2);
-    end
-    
-    set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
-    axis off;
-    % take frame and perform SIFT
-    
-    % cut license plate file and send to decipher.m, log frame nr and time
-
-    % print deciphered license plate in lstOutputBox
-
-end
+% licensevid = read(handles.vid);
+% totalframes = length(licensevid(1,1,1,:));
+% for i = 1:totalframes
+%     % show frame in axes
+%     frame = read(handles.vid,i);
+%     [box,crop,hit] = detectPlate(frame);
+%     axes(handles.axsVideoOutput);
+%     plate = im2bw(lapgauss(crop));
+%     platenum = plateident(plate);
+%     
+%     %if statement to check that platenum is not the same as the previous
+%     %entry before adding to listbox
+%     
+%     image(frame);
+%     if hit
+%         hold on;
+%         rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+%     end
+%     
+%     set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
+%     axis off;
+%     % take frame and perform SIFT
+%     
+%     % cut license plate file and send to decipher.m, log frame nr and time
+% 
+%     % print deciphered license plate in lstOutputBox
+% 
+% end
