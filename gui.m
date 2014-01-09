@@ -107,7 +107,30 @@ function btnImportVideo_Callback(hObject, eventdata, handles)
 importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
 handles.vid = vid;
-guidata(hObject,handles);
+
+% Immediately start processing video
+licensevid = read(vid);
+totalframes = length(licensevid(1,1,1,:));
+for i = 1:totalframes
+    % show frame in axes
+    frame = read(vid,i);
+    [box,crop,hit] = detectPlate(frame);
+    axes(handles.axsVideoOutput);
+
+
+    %if statement to check that platenum is not the same as the previous
+    %entry before adding to listbox
+
+    image(frame);
+    if hit
+        hold on;
+        rectangle('Position',box,'EdgeColor','r','LineWidth',2);
+    end
+
+    set(handles.txtFrame,'String',strcat(int2str(i),' / ',int2str(totalframes)));
+    axis off;
+    guidata(hObject,handles);
+end
 
 
 % --- Executes on button press in btnProcessVideo.
