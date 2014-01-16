@@ -85,7 +85,7 @@ for j = 1:length(rp2)
 %     subplot(3,3,j+1)
 %     imshow(letter)
     tempstr = imcompare(letter,letterheight, maxx-minx);
-    outputString = outputString + tempstr;
+    outputString = outputString + tempstr;  %is this how matlab concatenates strings?
 end
 clear minx miny maxx maxy letterheight letter tempstr;
 % platefigs = 
