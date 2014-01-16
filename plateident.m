@@ -25,7 +25,7 @@ se = ones(6,6);
 bw = imopen(bwplate,se);
 bw2 = imclose(bw,se);
 objects = bwconncomp(bw2,8);
-rp = regionprops(objects,'Area');
+rp = regionprops(objects,'all');
 l = labelmatrix(objects);
 
 subplot(2,2,1)
@@ -35,9 +35,22 @@ imshow(bw)
 subplot(2,2,3)
 imshow(bw2)
 subplot(2,2,4)
-imshow(label2rgb(l))
+imshow(label2rgb(l))    
+
 
 %% sort objects in the image by size, take largest object as max and min 
-%% y-value of all other objects, make the x-axis also between the largest 
-%% 6 objects, this should avoid all border issues and artifacts.
+% y-value of all other objects, make the x-axis also between the largest 
+% 6 objects, this should avoid all border issues and artifacts.
+s = sort(rp.Area, 'descend');
+for i = 1:6
+        box(i) = s(i).BoundingBox;
+end
 
+
+
+
+%% discretize the objects into 8 distinct objects
+
+%% compare each object to the database of images, return string
+
+%% concatenate string and return
