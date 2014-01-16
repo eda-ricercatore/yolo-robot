@@ -117,6 +117,9 @@ for i = 1:totalframes
     % show frame in axes
     frame = read(vid,i);
     [box,crop,hit] = detectPlate(frame);
+
+    % Clear axes and display next frame
+    cla;
     axes(handles.axsVideoOutput);
 
 
