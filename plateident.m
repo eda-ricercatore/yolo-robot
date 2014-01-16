@@ -28,28 +28,68 @@ objects = bwconncomp(bw2,8);
 rp = regionprops(objects,'all');
 l = labelmatrix(objects);
 
-subplot(2,2,1)
-imshow(bwplate)
-subplot(2,2,2)
-imshow(bw)
-subplot(2,2,3)
-imshow(bw2)
-subplot(2,2,4)
-imshow(label2rgb(l))    
+% subplot(2,2,1)
+% imshow(bwplate)
+% subplot(2,2,2)
+% imshow(bw)
+% subplot(2,2,3)
+% imshow(bw2)
+% subplot(2,2,4)
+% imshow(label2rgb(l))    
 
 
 %% sort objects in the image by size, take largest object as max and min 
 % y-value of all other objects, make the x-axis also between the largest 
 % 6 objects, this should avoid all border issues and artifacts.
-s = sort(rp.Area, 'descend');
-for i = 1:6
-        box(i) = s(i).BoundingBox;
+
+areas = [rp.Area];
+[~, sortedIndices] = sort(areas,'descend');
+minx = 10000;
+maxx = 0;
+miny = 10000;
+maxy = 0;
+if (rp(sortedIndices(6)).Area < 1000)
+    outputString = '';
+    return
 end
+for i = 1:6
+    minx = min(minx,min(rp(sortedIndices(i)).Extrema(:,1)));
+    miny = min(miny,min(rp(sortedIndices(i)).Extrema(:,2)));
+    maxx = max(maxx,max(rp(sortedIndices(i)).Extrema(:,1)));
+    maxy = max(maxy,max(rp(sortedIndices(i)).Extrema(:,2)));
+end
+letterheight = maxy-miny;
+newimage = imcrop(bw2,[minx miny maxx-minx maxy-miny]);
 
-
-
+clear minx miny maxx maxy;
 
 %% discretize the objects into 8 distinct objects
+objects = bwconncomp(newimage,8);
+rp2 = regionprops(objects,'all');
+% subplot(3,3,1)
+% imshow(newimage)
+
+outputString = '';
+
+for j = 1:length(rp2)
+% find box of letters
+    minx = min(rp2(j).Extrema(:,1));
+    maxx = max(rp2(j).Extrema(:,1));
+    miny = min(rp2(j).Extrema(:,2));
+    maxy = max(rp2(j).Extrema(:,2));
+    letter = imcrop(newimage,[minx miny maxx-minx letterheight]);
+%     imshow(letter)
+%     pause(0.75)
+%     letterskel = bwmorph(abs(letter),'thin',inf); %skeleton doesn't yield
+%     similar enough results
+%     subplot(3,3,j+1)
+%     imshow(letter)
+    tempstr = imcompare(letter,letterheight, maxx-minx);
+    outputString = outputString + tempstr;
+end
+clear minx miny maxx maxy letterheight letter tempstr;
+% platefigs = 
+
 
 %% compare each object to the database of images, return string
 
