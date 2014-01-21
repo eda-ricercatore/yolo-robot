@@ -27,7 +27,7 @@ bwplate = abs(im2bw(grplate1,0.5)-1);
 % bw = imopen(bwplate,se);
 % bw2 = imclose(bw,se);
 objects = bwconncomp(bwplate,8);
-rp = regionprops(objects,'all');
+rp = regionprops(objects,'Area','Extrema');
 l = labelmatrix(objects);
 
 % subplot(2,2,1)
@@ -72,7 +72,7 @@ clear minx miny maxx maxy i;
 
 %% discretize the objects into distinct objects
 objects = bwconncomp(newimage,8);
-rp2 = regionprops(objects,'all');
+rp2 = regionprops(objects,'Area','Extrema');
 % subplot(3,3,1)
 % imshow(newimage)
 
