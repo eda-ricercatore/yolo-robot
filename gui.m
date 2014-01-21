@@ -133,7 +133,8 @@ for i = 1:totalframes
 
         for j = 1:hit
             rectangle('Position',box(j,:),'EdgeColor','r','LineWidth',2);
-            %platenum = plateident(crop(j));
+            platenum = plateident(crop{j});
+            plate = validatePlate(platenum)
             %check om te zien of platenum al in listbox zit, anders
             %toevoegen
         end
