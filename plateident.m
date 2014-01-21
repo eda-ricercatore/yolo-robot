@@ -1,7 +1,7 @@
-%% function that takes a black white license plate image as input and returns the string of the license plate
+%% function that takes a license plate image as input and returns the string of the license plate
 
 function outputString = plateident(licenseplateimg)
-
+load letterarray
 % filter and make blackwhite
 % lgplate = lapgauss(licenseplateimg);
 % bwplate = im2bw(licenseplateimg,0.25);
@@ -49,7 +49,7 @@ maxx = 0;
 miny = 10000;
 maxy = 0;
 if (rp(sortedIndices(6)).Area < 1000)
-    outputString = '';
+    oString = ' ';
     return
 end
 for i = 1:6
@@ -61,7 +61,7 @@ end
 letterheight = maxy-miny;
 newimage = imcrop(bw2,[minx miny maxx-minx maxy-miny]);
 
-clear minx miny maxx maxy;
+clear minx miny maxx maxy i;
 
 %% discretize the objects into 8 distinct objects
 objects = bwconncomp(newimage,8);
@@ -69,28 +69,46 @@ rp2 = regionprops(objects,'all');
 % subplot(3,3,1)
 % imshow(newimage)
 
-outputString = '';
+oString = '';
 
 for j = 1:length(rp2)
-% find box of letters
-    minx = min(rp2(j).Extrema(:,1));
-    maxx = max(rp2(j).Extrema(:,1));
-    miny = min(rp2(j).Extrema(:,2));
-    maxy = max(rp2(j).Extrema(:,2));
-    letter = imcrop(newimage,[minx miny maxx-minx letterheight]);
-%     imshow(letter)
-%     pause(0.75)
-%     letterskel = bwmorph(abs(letter),'thin',inf); %skeleton doesn't yield
-%     similar enough results
-%     subplot(3,3,j+1)
-%     imshow(letter)
-    tempstr = imcompare(letter,letterheight, maxx-minx);
-    outputString = outputString + tempstr;  %is this how matlab concatenates strings?
+    if rp2(j).Area > 1000
+        
+        % find box of letters
+        minx = min(rp2(j).Extrema(:,1));
+        maxx = max(rp2(j).Extrema(:,1));
+        miny = min(rp2(j).Extrema(:,2));
+        maxy = max(rp2(j).Extrema(:,2));
+        letter = imcrop(newimage,[minx miny maxx-minx letterheight]);
+        %     imshow(letter)
+        %     pause(0.75)
+        %     letterskel = bwmorph(abs(letter),'thin',inf); %skeleton doesn't yield
+        %     similar enough results
+        %     subplot(3,3,j+1)
+        %     imshow(letter)
+        %     tempstr = imcompare(letter,letterheight, maxx-minx); %replaced by
+        %     scaling and iteration over array.
+        compar = zeros(length(letterArray),1);
+        for i = 1:length(letterArray)
+            % find letterarray(i,1) height and width
+            testletter = letterArray{i,1};
+            height = length(testletter(:,1));
+            width = length(testletter(1,:));
+            % templ = scaled letter by height and width
+            templ = imresize(letter, [height width]);
+            compar(i) = sum(sum(abs(testletter-templ)));
+            clear testletter height width
+        end
+        
+        testthresh = 150;
+        [letterMin letterIndex] = min(compar);
+        if letterMin < testthresh
+            oString = strcat(oString,letterArray{letterIndex,2});
+        else
+            oString = strcat(oString,' ');
+        end
+        clear minx maxx miny maxy letter compar
+    end
 end
+outputString = oString;
 clear minx miny maxx maxy letterheight letter tempstr;
-% platefigs = 
-
-
-%% compare each object to the database of images, return string
-
-%% concatenate string and return
