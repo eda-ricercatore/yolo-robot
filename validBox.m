@@ -5,11 +5,11 @@ function valid = validBox(box)
     % The box must not touch a border, the probability of an incomplete
     % plate is too high
     if (box(1) == 0.5 || box(1)+box(3) == 640.5)
-        valid = false
+        valid = false;
         return;
     end
     if (box(2) == 0.5 || box(2)+box(4) == 480.5)
-        valid = false
+        valid = false;
         return;
     end
 
