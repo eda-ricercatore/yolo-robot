@@ -40,7 +40,7 @@ l = labelmatrix(objects);
 
 %% sort objects in the image by size, take largest object as max and min 
 % y-value of all other objects, make the x-axis also between the largest 
-% 6 objects, this should avoid all border issues and artifacts.
+% 6 objects, this should avoid most border issues and artifacts.
 
 areas = [rp.Area];
 [~, sortedIndices] = sort(areas,'descend');
@@ -49,10 +49,10 @@ maxx = 0;
 miny = 10000;
 maxy = 0;
 if length(rp) < 6
-    OutputString = '';
+    outputString = '';
     return
 end
-if (rp(sortedIndices(6)).Area < 1000)
+if (rp(sortedIndices(6)).Area < 400)
     outputString = '';
     return
 end
@@ -67,7 +67,7 @@ newimage = imcrop(bw2,[minx miny maxx-minx maxy-miny]);
 
 clear minx miny maxx maxy i;
 
-%% discretize the objects into 8 distinct objects
+%% discretize the objects into distinct objects
 objects = bwconncomp(newimage,8);
 rp2 = regionprops(objects,'all');
 % subplot(3,3,1)
@@ -76,7 +76,7 @@ rp2 = regionprops(objects,'all');
 oString = '';
 
 for j = 1:length(rp2)
-    if rp2(j).Area > 1000
+    if rp2(j).Area > 400
         
         % find box of letters
         minx = min(rp2(j).Extrema(:,1));
