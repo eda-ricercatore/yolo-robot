@@ -109,10 +109,7 @@ vid = VideoReader(importfile);
 handles.vid = vid;
 
 % Immediately start processing video
-licensevid = read(vid);
-totalframes = length(licensevid(1,1,1,:));
-clear licensevid;
-tic
+totalframes = vid.NumberOfFrames;
 for i = 1:totalframes
     % show frame in axes
     frame = read(vid,i);
@@ -145,7 +142,6 @@ for i = 1:totalframes
     axis off;
     guidata(hObject,handles);
 end
-toc
 
 
 % --- Executes on button press in btnProcessVideo.
