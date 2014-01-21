@@ -12,6 +12,7 @@ load letterarray
 grplate = licenseplateimg(:,:,1);
 grplate1 = imcrop(grplate, [5 1 length(grplate(1,:,1))-10 length(grplate(:,1,1))]);
 bwplate = abs(im2bw(grplate1,0.5)-1);
+bwplate = imclearborder(bwplate);
 
 %% perform some minor binary morphology operations on the image, 
 %  not necessary, we do this after we crop the image further
@@ -87,6 +88,7 @@ for j = 1:length(rp2)
         miny = min(rp2(j).Extrema(:,2));
         maxy = max(rp2(j).Extrema(:,2));
         letter = imcrop(newimage,[minx miny maxx-minx letterheight]);
+
         %     imshow(letter)
         %     pause(0.75)
         %     letterskel = bwmorph(abs(letter),'thin',inf); %skeleton doesn't yield
@@ -101,14 +103,23 @@ for j = 1:length(rp2)
             testletter = letterArray{i,1};
             height = length(testletter(:,1));
             width = length(testletter(1,:));
+
+            % Special case for no. 1: Check height/width ratio
+            if (i == 22)
+                if (length(letter(1,:)) / length(letter(:,1)) > 0.5)
+                    compar(i) = 1000;
+                    continue;
+                end
+            end
+
             % templ = scaled letter by height and width
             templ = imresize(letter, [height width]);
             compar(i) = sum(sum(abs(testletter-templ)));
             clear testletter height width
         end
         
-        testthresh = 150;
-        [letterMin letterIndex] = min(compar);
+        testthresh = 200;
+        [letterMin, letterIndex] = min(compar);
         if letterMin < testthresh
             oString = strcat(oString,letterArray{letterIndex,2}{1});
         else
