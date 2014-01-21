@@ -6,7 +6,7 @@ function valid = validatePlate(plateIn)
 % at http://nl.wikipedia.org/wiki/Nederlands_kenteken
     
     % First check for sidecodes 7 & 8
-    if (regexp(plateIn,'[A-Z]{3}'))
+    if (regexp(plateIn,'\^[A-Z]{3}\$'))
         valid = regexprep(plateIn,'[A-Z]{3}','-$0-');
         return
     end
