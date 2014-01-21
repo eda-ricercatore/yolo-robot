@@ -25,7 +25,7 @@ bw = hueMask & satMask & valMask;
 clear hueMask satMask valMask frame_hsv frame_hue frame_sat frame_val
 
 objects = bwconncomp(bw,8);
-rp = regionprops(objects,'all');
+rp = regionprops(objects,'Area','BoundingBox','Orientation');
 
 % Get the areas in the binary image
 areas = [rp.Area];
@@ -60,15 +60,6 @@ for i= 1:totalAreas
 
         cutoffHeight = tand(orientation)*rotatedWidth;
         newHeight = rotatedHeight - 2*cutoffHeight;
-
-%         objectLeftTopY  = rp(index).Extrema(8,2);
-%         objectTopRightY = rp(index).Extrema(2,2);
-%         cropTop = objectLeftTopY - objectTopRightY;
-% 
-%         objectRightBottom = rp(index).Extrema(4,2);
-%         objectBottomLeft  = rp(index).Extrema(6,2);
-%         cropBottom = objectBottomLeft - objectRightBottom;
-%         cropHeight = length(rotated(:,1,1)) - cropBottom - cropTop;
 
         twiceCropped = imcrop(rotated, [0,cutoffHeight,rotatedWidth, newHeight]);
         crop{i} = twiceCropped;
