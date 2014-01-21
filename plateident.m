@@ -9,7 +9,7 @@ load letterarray
 % it is apparently computationally efficient to convert the image to the
 % grayscale before converting it to a black and white image. 
 grplate = rgb2gray(licenseplateimg);
-bwplate = abs(im2bw(grplate,0.25)-1);
+bwplate = abs(im2bw(grplate,0.3)-1);
 
 %% perform some minor binary morphology operations on the image, 
 %  not necessary, we do this after we crop the image further
@@ -107,7 +107,7 @@ for j = 1:length(rp2)
         testthresh = 150;
         [letterMin letterIndex] = min(compar);
         if letterMin < testthresh
-            oString = strcat(oString,letterArray{letterIndex,2});
+            oString = strcat(oString,letterArray{letterIndex,2}{1});
         else
             oString = strcat(oString,' ');
         end
