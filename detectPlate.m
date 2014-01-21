@@ -46,7 +46,7 @@ for i= 1:totalAreas
         boxes(i,:) = currentBox;
 
         % Crop the entire frame to the (possibly rotated) plate
-        [cropped, croppedSize] = imcrop(frame, currentBox);
+        [cropped, croppedSize] = imcrop(frame_hsv, currentBox);
         croppedWidth = croppedSize(3);
 
         % Get rotation and undo in-plane rotation of the plate
