@@ -48,8 +48,12 @@ minx = 10000;
 maxx = 0;
 miny = 10000;
 maxy = 0;
+if length(rp) < 6
+    OutputString = '';
+    return
+end
 if (rp(sortedIndices(6)).Area < 1000)
-    oString = ' ';
+    outputString = '';
     return
 end
 for i = 1:6
