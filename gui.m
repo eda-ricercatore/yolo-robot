@@ -110,6 +110,7 @@ handles.vid = vid;
 
 % Immediately start processing video
 totalframes = vid.NumberOfFrames;
+framerate   = vid.FrameRate;
 for i = 1:totalframes
     % show frame in axes
     frame = read(vid,i);
