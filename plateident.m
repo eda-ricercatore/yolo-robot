@@ -8,8 +8,10 @@ load letterarray
 
 % it is apparently computationally efficient to convert the image to the
 % grayscale before converting it to a black and white image. 
-grplate = rgb2gray(licenseplateimg);
-bwplate = abs(im2bw(grplate,0.3)-1);
+
+grplate = licenseplateimg(:,:,1);
+grplate1 = imcrop(grplate, [5 1 length(grplate(1,:,1))-10 length(grplate(:,1,1))]);
+bwplate = abs(im2bw(grplate1,0.5)-1);
 
 %% perform some minor binary morphology operations on the image, 
 %  not necessary, we do this after we crop the image further
@@ -21,10 +23,10 @@ bwplate = abs(im2bw(grplate,0.3)-1);
 % character this will help with identification (this can be augmented if we 
 % wish the system to handle foreign plates)
 
-se = ones(6,6);
-bw = imopen(bwplate,se);
-bw2 = imclose(bw,se);
-objects = bwconncomp(bw2,8);
+% se = ones(6,6);
+% bw = imopen(bwplate,se);
+% bw2 = imclose(bw,se);
+objects = bwconncomp(bwplate,8);
 rp = regionprops(objects,'all');
 l = labelmatrix(objects);
 
@@ -37,6 +39,7 @@ l = labelmatrix(objects);
 % subplot(2,2,4)
 % imshow(label2rgb(l))    
 
+areaThres = length(bwplate(1,:))*length(bwplate(:,1))*0.008;
 
 %% sort objects in the image by size, take largest object as max and min 
 % y-value of all other objects, make the x-axis also between the largest 
@@ -52,7 +55,7 @@ if length(rp) < 6
     outputString = '';
     return
 end
-if (rp(sortedIndices(6)).Area < 400)
+if (rp(sortedIndices(6)).Area < areaThres)
     outputString = '';
     return
 end
@@ -63,7 +66,7 @@ for i = 1:6
     maxy = max(maxy,max(rp(sortedIndices(i)).Extrema(:,2)));
 end
 letterheight = maxy-miny;
-newimage = imcrop(bw2,[minx miny maxx-minx maxy-miny]);
+newimage = imcrop(bwplate,[minx miny maxx-minx maxy-miny]);
 
 clear minx miny maxx maxy i;
 
@@ -76,7 +79,7 @@ rp2 = regionprops(objects,'all');
 oString = '';
 
 for j = 1:length(rp2)
-    if rp2(j).Area > 400
+    if rp2(j).Area > areaThres
         
         % find box of letters
         minx = min(rp2(j).Extrema(:,1));
