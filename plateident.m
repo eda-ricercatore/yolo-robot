@@ -98,11 +98,10 @@ for j = 1:length(rp2)
         %     tempstr = imcompare(letter,letterheight, maxx-minx); %replaced by
         %     scaling and iteration over array.
         compar = zeros(length(letterArray),1);
+        temp1 = imresize(letter, [60 40]);
         for i = 1:length(letterArray)
             % find letterarray(i,1) height and width
             testletter = letterArray{i,1};
-            height = length(testletter(:,1));
-            width = length(testletter(1,:));
 
             % Special case for no. 1: Check height/width ratio
             if (i == 22)
@@ -112,8 +111,6 @@ for j = 1:length(rp2)
                 end
             end
 
-            % templ = scaled letter by height and width
-            templ = imresize(letter, [height width]);
             compar(i) = sum(sum(abs(testletter-templ)));
             clear testletter height width
         end
@@ -125,7 +122,7 @@ for j = 1:length(rp2)
         else
             oString = strcat(oString,' ');
         end
-        clear minx maxx miny maxy letter compar
+        clear minx maxx miny maxy letter compar temp1
     end
 end
 outputString = oString;
