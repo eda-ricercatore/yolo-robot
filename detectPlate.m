@@ -55,16 +55,22 @@ for i= 1:totalAreas
 
         % The rotation created an image that is too large, we need to do a
         % second cropping
-        objectLeftTopY  = rp(index).Extrema(8,2);
-        objectTopRightY = rp(index).Extrema(2,2);
-        cropTop = objectLeftTopY - objectTopRightY;
+        rotatedWidth  = length(rotated(1,:,1));
+        rotatedHeight = length(rotated(:,1,:));
 
-        objectRightBottom = rp(index).Extrema(4,2);
-        objectBottomLeft  = rp(index).Extrema(6,2);
-        cropBottom = objectBottomLeft - objectRightBottom;
-        cropHeight = length(rotated(:,1,1)) - cropBottom - cropTop;
+        cutoffHeight = tand(orientation)*rotatedWidth;
+        newHeight = rotatedHeight - 2*cutoffHeight;
 
-        twiceCropped = imcrop(rotated, [0,cropTop,croppedWidth,cropHeight]);
+%         objectLeftTopY  = rp(index).Extrema(8,2);
+%         objectTopRightY = rp(index).Extrema(2,2);
+%         cropTop = objectLeftTopY - objectTopRightY;
+% 
+%         objectRightBottom = rp(index).Extrema(4,2);
+%         objectBottomLeft  = rp(index).Extrema(6,2);
+%         cropBottom = objectBottomLeft - objectRightBottom;
+%         cropHeight = length(rotated(:,1,1)) - cropBottom - cropTop;
+
+        twiceCropped = imcrop(rotated, [0,cutoffHeight,rotatedWidth, newHeight]);
         crop{i} = twiceCropped;
     else
         % Since we are using sorted elements, the first invalid box will
