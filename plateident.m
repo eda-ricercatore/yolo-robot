@@ -109,9 +109,8 @@ for j = 1:length(rp2)
         maxx = max(rp2(j).Extrema(:,1));
         miny = min(rp2(j).Extrema(:,2));
         maxy = max(rp2(j).Extrema(:,2));
-        letter = imcrop(newimage,[minx miny maxx-minx letterheight]);
+        letter = imcrop(newimage,[minx miny maxx-minx maxy-miny]);
 
-        %     imshow(letter)
         %     pause(0.75)
         %     letterskel = bwmorph(abs(letter),'thin',inf); %skeleton doesn't yield
         %     similar enough results
@@ -121,29 +120,28 @@ for j = 1:length(rp2)
         %     scaling and iteration over array.
         compar = zeros(length(letterArray),1);
         templ = imresize(letter, [60 40]);
+
+        if (length(letter(1,:)) / length(letter(:,1)) < 0.5)
+            oString = strcat(oString,'1');
+            continue;
+        end
         for i = 1:length(letterArray)
             % find letterarray(i,1) height and width
             testletter = letterArray{i,1};
 
             % Special case for no. 1: Check height/width ratio
             if (i == 22)
-                if (length(letter(1,:)) / length(letter(:,1)) > 0.5)
-                    compar(i) = 1000;
-                    continue;
-                end
+                compar(i) = 10000;
+                continue;
             end
 
             compar(i) = sum(sum(abs(testletter-templ)));
             clear testletter height width
         end
-        
-        testthresh = 200;
+
         [letterMin, letterIndex] = min(compar);
-        if letterMin < testthresh
-            oString = strcat(oString,letterArray{letterIndex,2}{1});
-        else
-            oString = strcat(oString,' ');
-        end
+        oString = strcat(oString,letterArray{letterIndex,2}{1});
+
         clear minx maxx miny maxy letter compar temp1
     end
 end

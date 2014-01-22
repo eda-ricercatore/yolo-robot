@@ -134,7 +134,13 @@ for i = 1:totalframes
         for j = 1:hit
             rectangle('Position',box(j,:),'EdgeColor','r','LineWidth',2);
             platenum = plateident(crop{j});
-            plate = validatePlate(platenum)
+            plate = validatePlate(platenum);
+            if ~strcmp(plate,'')
+                plate
+            end
+
+%             oldString = get(handles.lstOutputBox,'String');
+%             set(handles.lstOutputBox,'String', plate);
             %check om te zien of platenum al in listbox zit, anders
             %toevoegen
         end
@@ -144,7 +150,6 @@ for i = 1:totalframes
     axis off;
     guidata(hObject,handles);
 end
-
 
 % --- Executes on button press in btnProcessVideo.
 % function btnProcessVideo_Callback(hObject, eventdata, handles)
