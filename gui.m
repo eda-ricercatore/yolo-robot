@@ -108,6 +108,9 @@ importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
 handles.vid = vid;
 
+% Rolling Cell to keep track of latest plates
+last_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
+
 % Immediately start processing video
 totalframes = vid.NumberOfFrames;
 framerate   = vid.FrameRate;
@@ -135,9 +138,13 @@ for i = 1:totalframes
             platenum = plateident(crop{j});
             plate = validatePlate(platenum);
             if ~strcmp(plate,'')
-                oldString = get(handles.lstOutputBox,'String');
-                newString = [oldString; {plate}];
-                set(handles.lstOutputBox,'String',newString);
+                last_plates{rem(i,5)+1} = plate;
+                index = processRollingCell(last_plates);
+                if index
+                    oldString = get(handles.lstOutputBox,'String');
+                    newString = [oldString; last_plates{index}];
+                    set(handles.lstOutputBox,'String',newString);
+                end
             end
 
 %             oldString = get(handles.lstOutputBox,'String');
