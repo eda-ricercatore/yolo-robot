@@ -6,21 +6,21 @@ load letterarray
 % lgplate = lapgauss(licenseplateimg);
 % bwplate = im2bw(licenseplateimg,0.25);
 
-% it is apparently computationally efficient to convert the image to the
-% grayscale before converting it to a black and white image. 
-
 %%%%%%%%%%%%%% Make a variable intensity threshold based on the average
 %%%%%%%%%%%%%% intensity of a scene, somewhere between 0.4 and 0.6?
 
 sceneIntensityTemp = rgb2hsv(licenseplateimg);
 sceneIntensity = sceneIntensityTemp(:,:,3);
-iThresh = mean(max(sceneIntensity));
-if iThresh > 0.8
-    sceneIntensityAvg = 0.6;
-elseif iThresh > 0.6
+height = floor(length(licenseplateimg(:,1,1))/2);
+iThresh = mean(mean(sceneIntensity(height-1:height+1,:)))
+if iThresh > 0.75
+    sceneIntensityAvg = 0.65;
+elseif iThresh > 0.55
     sceneIntensityAvg = 0.5;
-else
+elseif iThresh > 0.4
     sceneIntensityAvg = 0.4;
+else
+    sceneIntensityAvg = 0.3;
 end
 bwplate = abs(im2bw(sceneIntensity,sceneIntensityAvg)-1);
 % 
@@ -46,7 +46,7 @@ bwplate = abs(im2bw(sceneIntensity,sceneIntensityAvg)-1);
 % bw2 = imclose(bw,se);
 objects = bwconncomp(bwplate,8);
 rp = regionprops(objects,'Area','Extrema');
-
+% imshow(bwplate)
 % subplot(2,2,1)
 % imshow(bwplate)
 % subplot(2,2,2)
@@ -90,7 +90,7 @@ newimage = imcrop(newimage,[minx-1 miny-1 maxx-minx+2 maxy-miny+2]);
 width = length(newimage(1,:));
 height = length(newimage(:,1));
 newimage = imclearborder(newimage);
-% imshow(newimage)
+imshow(newimage)
 clear minx miny maxx maxy i width;
 
 %% discretize the objects into distinct objects
