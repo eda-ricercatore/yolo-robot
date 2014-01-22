@@ -125,7 +125,6 @@ for i = 1:totalframes
     %entry before adding to listbox
 
     image(frame);
-    clear frame
     % check invoeren om runtime te optimaliseren (intensity difference
     % oid).
     if hit > 0
@@ -136,7 +135,9 @@ for i = 1:totalframes
             platenum = plateident(crop{j});
             plate = validatePlate(platenum);
             if ~strcmp(plate,'')
-                plate
+                oldString = get(handles.lstOutputBox,'String');
+                newString = [oldString; {plate}];
+                set(handles.lstOutputBox,'String',newString);
             end
 
 %             oldString = get(handles.lstOutputBox,'String');
