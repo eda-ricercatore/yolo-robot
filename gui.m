@@ -109,7 +109,7 @@ vid = VideoReader(importfile);
 handles.vid = vid;
 
 % Rolling Cell to keep track of latest plates
-last_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
+last_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE', 'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
 spotted_plates = {'','','',''};
 spotted_plates_idx = 1;
 
@@ -142,19 +142,21 @@ for i = 1:totalframes
             axis off;
             plate = validatePlate(platenum);
             if ~strcmp(plate,'')
-                last_plates{rem(i,5)+1} = plate;
-                index = processRollingCell(last_plates);
-                if index
-                    spotted_plate = last_plates{index};
-                    if ~ismember(spotted_plate,spotted_plates(:,1))
-                        maker = getCarMaker(spotted_plate);
-                        if ~strcmp(maker,'')
-                            spotted_plates{spotted_plates_idx,1} = spotted_plate;
-                            spotted_plates{spotted_plates_idx,2} = i;
-                            spotted_plates{spotted_plates_idx,3} = i/framerate;
-                            spotted_plates{spotted_plates_idx,4} = maker;
-                            spotted_plates_idx = spotted_plates_idx + 1;
-                            set(handles.platesTable,'Data',spotted_plates);
+                last_plates{rem(i,10)+1} = plate;
+                indices = processRollingCell(last_plates);
+                if ~isempty(indices)
+                    for index=1:length(indices)
+                        spotted_plate = last_plates{index};
+                        if ~ismember(spotted_plate,spotted_plates(:,1))
+                            maker = getCarMaker(spotted_plate);
+                            if ~strcmp(maker,'')
+                                spotted_plates{spotted_plates_idx,1} = spotted_plate;
+                                spotted_plates{spotted_plates_idx,2} = i;
+                                spotted_plates{spotted_plates_idx,3} = i/framerate;
+                                spotted_plates{spotted_plates_idx,4} = maker;
+                                spotted_plates_idx = spotted_plates_idx + 1;
+                                set(handles.platesTable,'Data',spotted_plates);
+                            end
                         end
                     end
                 end
