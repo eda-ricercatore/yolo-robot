@@ -12,7 +12,7 @@ load letterarray
 sceneIntensity = licenseplateimg(:,:,3);
 height = floor(length(licenseplateimg(:,1,1))/2);
 faultImage = zeros(size(licenseplateimg));
-if height == 0
+if height < 2
     outputString = '';
     outputImage = faultImage;
     return
