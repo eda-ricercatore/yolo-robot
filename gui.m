@@ -109,8 +109,7 @@ vid = VideoReader(importfile);
 handles.vid = vid;
 
 % Rolling Cell to keep track of latest plates
-init_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
-last_plates = {init_plates; init_plates};
+last_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
 spotted_plates = {'','','',''};
 spotted_plates_idx = 1;
 
@@ -143,10 +142,10 @@ for i = 1:totalframes
             axis off;
             plate = validatePlate(platenum);
             if ~strcmp(plate,'')
-                last_plates{j}{rem(i,5)+1} = plate;
-                index = processRollingCell(last_plates{j});
+                last_plates{rem(i,5)+1} = plate;
+                index = processRollingCell(last_plates);
                 if index
-                    spotted_plate = last_plates{j}{index};
+                    spotted_plate = last_plates{index};
                     if ~ismember(spotted_plate,spotted_plates(:,1))
                         maker = getCarMaker(spotted_plate);
                         if ~strcmp(maker,'')
