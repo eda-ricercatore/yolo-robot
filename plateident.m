@@ -129,7 +129,7 @@ for j = 1:length(rp2)
         compar = zeros(length(letterArray),1);
         templ = imresize(letter, [60 40]);
 
-        if (length(letter(1,:)) / length(letter(:,1)) < 0.5)
+        if (length(letter(1,:)) / length(letter(:,1)) < 0.4)
             oString = strcat(oString,'1');
             continue;
         end
