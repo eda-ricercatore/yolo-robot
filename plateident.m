@@ -9,10 +9,9 @@ load letterarray
 %%%%%%%%%%%%%% Make a variable intensity threshold based on the average
 %%%%%%%%%%%%%% intensity of a scene, somewhere between 0.4 and 0.6?
 
-sceneIntensityTemp = rgb2hsv(licenseplateimg);
-sceneIntensity = sceneIntensityTemp(:,:,3);
+sceneIntensity = licenseplateimg(:,:,3);
 height = floor(length(licenseplateimg(:,1,1))/2);
-iThresh = mean(mean(sceneIntensity(height-1:height+1,:)))
+iThresh = mean(mean(sceneIntensity(height-1:height+1,:)));
 if iThresh > 0.75
     sceneIntensityAvg = 0.65;
 elseif iThresh > 0.55

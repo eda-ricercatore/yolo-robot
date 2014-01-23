@@ -22,7 +22,7 @@ valMask = (frame_val >= valThresholdLow) & (frame_val <= valThresholdHigh);
 
 bw = hueMask & satMask & valMask;
 
-clear hueMask satMask valMask frame_hsv frame_hue frame_sat frame_val
+clear hueMask satMask valMask frame_hue frame_sat frame_val
 
 objects = bwconncomp(bw,8);
 rp = regionprops(objects,'Area','BoundingBox','Orientation');
@@ -46,9 +46,7 @@ for i= 1:totalAreas
         boxes(i,:) = currentBox;
 
         % Crop the entire frame to the (possibly rotated) plate
-        [cropped, croppedSize] = imcrop(frame, currentBox);
-        croppedWidth = croppedSize(3);
-
+        cropped = imcrop(frame_hsv, currentBox);
         % Get rotation and undo in-plane rotation of the plate
         orientation = rp(index).Orientation;
         rotated = imrotate(cropped, -orientation, 'bicubic', 'loose');
