@@ -36,8 +36,8 @@ totalAreas = length(areas);
 
 % Loop over objects to reveal plates
 hits = 0;
-boxes = zeros(totalAreas,4);
-crop = cell(1, totalAreas);
+boxes = [];
+crop = {};
 for i= 1:totalAreas
     index = sortedIndices(i);
     currentBox = rp(index).BoundingBox;
