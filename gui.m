@@ -110,7 +110,7 @@ handles.vid = vid;
 
 % Rolling Cell to keep track of latest plates
 last_plates = {'AA-AA-AA', 'AA-AA-AB', 'AA-AA-AC', 'AA-AA-AD', 'AA-AA-AE'};
-spotted_plates = {};
+spotted_plates = {'','',''};
 spotted_plates_idx = 1;
 
 % Immediately start processing video
@@ -144,10 +144,12 @@ for i = 1:totalframes
                 index = processRollingCell(last_plates);
                 if index
                     spotted_plate = last_plates{index};
-                    if ~ismember(spotted_plate,spotted_plates)
-                        spotted_plates{spotted_plates_idx} = spotted_plate;
+                    if ~ismember(spotted_plate,spotted_plates(:,1))
+                        spotted_plates{spotted_plates_idx,1} = spotted_plate;
+                        spotted_plates{spotted_plates_idx,2} = i;
+                        spotted_plates{spotted_plates_idx,3} = i/framerate;
                         spotted_plates_idx = spotted_plates_idx + 1;
-                        set(handles.lstOutputBox,'String',char(spotted_plates));
+                        set(handles.platesTable,'Data',spotted_plates);
                     end
                 end
             end
