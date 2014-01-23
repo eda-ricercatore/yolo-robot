@@ -103,7 +103,7 @@ function btnImportVideo_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % open prompt to select file
-[filename, pathname] = uigetfile('*.avi', 'Select the file to be imported');
+[filename, pathname] = uigetfile('videos/*.avi', 'Select the file to be imported');
 importfile = strcat(pathname, filename);
 vid = VideoReader(importfile);
 handles.vid = vid;
