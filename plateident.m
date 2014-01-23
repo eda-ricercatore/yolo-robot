@@ -11,6 +11,12 @@ load letterarray
 
 sceneIntensity = licenseplateimg(:,:,3);
 height = floor(length(licenseplateimg(:,1,1))/2);
+
+if height == 0
+    outputString = '';
+    return
+end
+
 iThresh = mean(mean(sceneIntensity(height-1:height+1,:)));
 if iThresh > 0.75
     sceneIntensityAvg = 0.65;
