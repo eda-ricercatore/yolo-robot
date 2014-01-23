@@ -147,12 +147,15 @@ for i = 1:totalframes
                 if index
                     spotted_plate = last_plates{index};
                     if ~ismember(spotted_plate,spotted_plates(:,1))
-                        spotted_plates{spotted_plates_idx,1} = spotted_plate;
-                        spotted_plates{spotted_plates_idx,2} = i;
-                        spotted_plates{spotted_plates_idx,3} = i/framerate;
-                        spotted_plates{spotted_plates_idx,4} = getCarMaker(spotted_plate);
-                        spotted_plates_idx = spotted_plates_idx + 1;
-                        set(handles.platesTable,'Data',spotted_plates);
+                        maker = getCarMaker(spotted_plate);
+                        if ~strcmp(maker,'')
+                            spotted_plates{spotted_plates_idx,1} = spotted_plate;
+                            spotted_plates{spotted_plates_idx,2} = i;
+                            spotted_plates{spotted_plates_idx,3} = i/framerate;
+                            spotted_plates{spotted_plates_idx,4} = maker;
+                            spotted_plates_idx = spotted_plates_idx + 1;
+                            set(handles.platesTable,'Data',spotted_plates);
+                        end
                     end
                 end
             end
