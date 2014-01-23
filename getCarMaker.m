@@ -1,9 +1,14 @@
 function maker = getCarMaker(plate)
-    site = urlread(['https://ovi.rdw.nl/default.aspx?kenteken=' plate]);
+    try
+        site = urlread(['https://ovi.rdw.nl/default.aspx?kenteken=' plate]);
+    catch err
+        maker = '';
+        return
+    end
     expr = '<div class=\"ui-block-d border ovigrid\" id=\"Merk\">[A-Z]+</div>';
     div = regexp(site, expr, 'match');
     cell = regexprep(div, '<.*?>','');
-    if length(cell) > 0
+    if ~isempty(cell)
         maker = cell{1};
     else
         maker = '';
