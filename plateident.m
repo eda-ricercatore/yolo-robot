@@ -1,6 +1,6 @@
 %% function that takes a license plate image as input and returns the string of the license plate
 
-function outputString = plateident(licenseplateimg)
+function [outputImage, outputString] = plateident(licenseplateimg)
 load letterarray
 % filter and make blackwhite
 % lgplate = lapgauss(licenseplateimg);
@@ -11,9 +11,10 @@ load letterarray
 
 sceneIntensity = licenseplateimg(:,:,3);
 height = floor(length(licenseplateimg(:,1,1))/2);
-
+faultImage = zeros(length(licenseplateimg(:,1)),length(licenseplateimg(1,:)));
 if height == 0
     outputString = '';
+    outputImage = faultImage;
     return
 end
 
@@ -75,10 +76,12 @@ miny = 10000;
 maxy = 0;
 if length(rp) < 6
     outputString = '';
+    outputImage = faultImage;
     return
 end
 if (rp(sortedIndices(6)).Area < areaThres)
     outputString = '';
+    outputImage = faultImage;
     return
 end
 newimage = bwplate;
@@ -95,7 +98,7 @@ newimage = imcrop(newimage,[minx-1 miny-1 maxx-minx+2 maxy-miny+2]);
 width = length(newimage(1,:));
 height = length(newimage(:,1));
 newimage = imclearborder(newimage);
-imshow(newimage)
+outputImage = newimage;
 clear minx miny maxx maxy i width;
 
 %% discretize the objects into distinct objects

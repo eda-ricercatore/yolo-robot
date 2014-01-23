@@ -122,9 +122,8 @@ for i = 1:totalframes
     [box,crop,hit] = detectPlate(frame);
 
     % Clear axes and display next frame
-    cla;
     axes(handles.axsVideoOutput);
-
+    cla;
 
     %if statement to check that platenum is not the same as the previous
     %entry before adding to listbox
@@ -137,7 +136,10 @@ for i = 1:totalframes
 
         for j = 1:hit
             rectangle('Position',box(j,:),'EdgeColor','r','LineWidth',2);
-            platenum = plateident(crop{j});
+            [plateimg, platenum] = plateident(crop{j});
+            axes(handles.axsSeg);
+            imshow(plateimg);
+            axis off;
             plate = validatePlate(platenum);
             if ~strcmp(plate,'')
                 last_plates{rem(i,5)+1} = plate;
